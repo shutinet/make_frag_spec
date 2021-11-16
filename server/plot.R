@@ -73,62 +73,36 @@ plot_empty_MS <- function(title = "Mass Spectra", yTitle = 'Intensity') {
 	p
 }
 
-plot_MS <- function(data) {
+plot_MS <- function(data, yrange = c()) {
 	if (nrow(data) == 0) return(plot_empty_MS(title = "Mass spectra"))
 	
-	p1 <- plotly::layout(
-		plotly::add_annotations(
-				plotly::add_segments(
-				plot_empty_MS(title = "Mass spectra"), 
+	plotly::toWebGL(
+		plotly::layout(
+			plotly::add_annotations(
+					plotly::add_segments(
+					plot_empty_MS(title = "Mass spectra"), 
+					x = data[, 1], 
+					xend = data[, 1], 
+					y = data[, 2], 
+					yend = 0, 
+					color = I("black"),
+					showlegend = FALSE
+				), 
 				x = data[, 1], 
-				xend = data[, 1], 
-				y = data[, 2], 
-				yend = 0, 
-				color = I("black"),
-				showlegend = FALSE
+				y = data[, 2] + 5, 
+				hoverinfo = "text", 
+				text = data[, 1], 
+				xref = 'x', 
+				yref = 'y', 
+				showarrow = FALSE
 			), 
-			x = data[, 1], 
-			y = data[, 2] + 5, 
-			hoverinfo = "text", 
-			text = data[, 1], 
-			xref = 'x', 
-			yref = 'y', 
-			showarrow = FALSE
-		), 
-		xaxis = list(
-			range = c(
-				min(data[, 1]) - 1, 
-				max(data[, 1]) + 1
-			)
-		), 
-		yaxis = list(range = c(0, 100))
+			xaxis = list(
+				range = c(
+					min(data[, 1]) - 1, 
+					max(data[, 1]) + 1
+				)
+			), 
+			yaxis = list(range = yrange)
+		)
 	)
-	p2 <- plotly::layout(
-		plotly::add_annotations(
-			plotly::add_segments(
-				plot_empty_MS(title = "Mass spectra", yTitle = ""), 
-				x = data[, 1], 
-				xend = data[, 1], 
-				y = data[, 3], 
-				yend = 0, 
-				color = I("black"),
-				showlegend = FALSE
-			),  
-			x = data[, 1], 
-			y = data[, 3] + 5, 
-			hoverinfo = "text", 
-			text = data[, 1], 
-			xref = 'x', 
-			yref = 'y', 
-			showarrow = FALSE
-		), 
-		xaxis = list(
-			range = c(
-				min(data[, 1]) - 1, 
-				max(data[, 1]) + 1
-			)
-		), 
-		yaxis = list(range = c(0, 100))
-	)
-	plotly::toWebGL(plotly::subplot(p1, p2, nrows = 2, shareX = TRUE))
 }
