@@ -2,6 +2,8 @@ shiny::shinyServer(function(input, output, session) {
 
 source(file.path('server', 'func.R'), local = TRUE)$value
 
+source(file.path('server', 'plot.R'), local = TRUE)$value
+
 source(file.path('server', 'main.R'), local = TRUE)$value
 
 # hide loader & show app div
